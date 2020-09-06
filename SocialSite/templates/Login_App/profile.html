@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{user.username}} | profile {% endblock %}
+{% block css%}
+<style>
+    .post{
+        display: flex;
+        justify-content: space-between;
+    }
+    .crop{
+        display: flex;
+        justify-content: space-around;
+        overflow: hidden;
+        flex-wrap: wrap;
+    }
+    .crop img{
+        width: 180px;
+        height: 180px;
+        padding: 2px;
+
+    }
+</style>
+
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-sm-4 shadow-none p-3 mb-5 bg-light rounded" style="border-right: 2px solid white;">
+        <center>
+            {% if user.user_profile.profile_pic %}
+            <img src="/media/{{user.user_profile.profile_pic}}" alt="profile_pic" width=150px; height=150px; class="rounded-circle">
+            {% else %}
+            <img src="/media/profile_pic.png" alt="default_pic" width=150px; height=150px; class="rounded-circle"> 
+            {% endif %}
+            <hr>
+            <h4>Username : {{user.username}}</h4>
+            <hr>
+            <h6> {{user.post.count}} posts | {{user.following.count}} Followers | 
+                {{user.follower.count}} Following
+            </h6>
+            <hr>
+            <h6>
+                Name : {{user.user_profile.full_name}}
+            </h6>
+            <hr>
+            <p>
+                <b>descriptions : </b>
+                {{user.user_profile.description}}
+
+            </p>
+
+            <hr>
+            <h6>Birth Date: {{user.user_profile.dob}}</h6>
+            <hr>
+            <h6>Facebook : {{user.user_profile.facebook}} </h6>
+            <hr>
+            <h6>Website : {{user.user_profile.website}} </h6>
+            <hr>
+            <button class="btn btn-info"><a href="{% url 'Login_App:edit_profile' %}" 
+                style="text-decoration:none;color:white;">Edit Profile</a></button>
+    
+        </center>
+
+    </div>
+    <div class="col-sm-8 shadow-none p-3 mb-5 bg-light rounded" style="border-left: 2px solid white;">
+        <div class="post">
+        <div>
+            <h3>Your Posts : </h3>
+
+        </div>
+        <div>
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+              Create New Post
+            </button>
+          
+            <!-- The Modal -->
+            <div class="modal fade" id="myModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Post Photo</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{form|crispy}}
+                        {% csrf_token %}
+                        <button type="Submit" class="btn btn-info">POST</button>
+
+                    </form>
+                  </div>
+                  
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancle</button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+      </div>
+    </div>
+    <hr>
+    <!--start User post section-->
+
+    <div class="shadow-sm p-3 mb-5 bg-white crop">
+        {% for post in user.post.all %}
+        <div>
+            <h5># {{post.caption}} </h5>
+            <hr>
+            <img src="/media/{{post.image}}" alt="Image">
+            <br>
+            <i><b>{{post.like_post.count}} Loves</b></i>
+            <hr>
+            <button class="btn btn-sm btn-info"><a href="{% url 'Posts_App:update_post' post.pk %}" style="text-decoration: none;color: white;">edit</a></button>
+            <br><br>
+        </div>
+
+        {% endfor %}
+    </div>
+
+
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{title}} {% endblock %}
+{% block css%}
+{% endblock %}
+{% block body_block %}
+<div class="shadow-sm p-3 mb-5 bg-light">
+
+    <h2>Update Post:</h2>
+    <hr>
+    <img src="/media/{{post.image}}" alt="Image" width="150px" height="150px" class="rounded"> 
+    <form method="POST" enctype="multipart/form-data">
+        {{form|crispy}}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-info">update</button>
+        &nbsp; &nbsp;
+        <button class="btn btn-danger" onclick="return confirm('Are Your sure, Delete This Post ?')" ><a href="{% url 'Posts_App:delete_post' post.pk %}"   
+        style="text-decoration: none;color: white;" >Delete</a></button>
+    </form>
+
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{title}} {% endblock %}
+{% block css%}
+
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-sm-7 shadow-none p-3 mb-5 bg-light rounded">
+        <div class="alert alert-primary" style="min-height:100%" >
+
+            <h1>" WELCOME TO OUR SOCIAL SITE "</h1>
+            <h3>If you don't have an Account, Please Create Your Account
+                First.....And Login  To Enjoy Our Social Site !
+            </h3>
+        </div>
+
+    </div>
+    <div class="col-sm-4 shadow-none p-3 mb-5 bg-light rounded" style="margin-left: 5px;">
+        <center>
+            <h1>Login</h1>
+            <hr>
+    
+            <form method="POST">
+                {{form|crispy}}
+                {% csrf_token %} 
+                <button type="submit" class="btn btn-info" style="width: 100%;">Login</button>
+            </form>
+            <hr>
+            <p>Don't have account ? <a href="{% url 'Login_App:sign_up' %}">Sign up </a></p>
+            
+
+        </center>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+

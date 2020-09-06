@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{title}} {% endblock %}
+{% block css%}
+
+{% endblock %}
+
+{% block body_block %}
+<div class="shadow-none p-3 mb-5 bg-light rounded">
+    <h1>Edit  your Profile : </h1>
+    <hr>
+    {% if user.user_profile.profile_pic %}
+    <img src="/media/{{user.user_profile.profile_pic}}" alt="profile_pic" width=150px; height=150px; class="rounded-circle">
+    {% else %}
+    <img src="/media/profile_pic.png" alt="default_pic" width=150px; height=150px; class="rounded-circle"> 
+    <br>
+    <br>
+    {% endif %}
+    <form  enctype="multipart/form-data" method="POST">
+
+    {{form|crispy}}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-info">Update</button>
+
+    </form>
+    <hr>
+
+</div>
+
+{% endblock %}

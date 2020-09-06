@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} {{title}} {% endblock %}
+{% block css%}
+
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-sm-4 shadow-none p-3 mb-5 bg-light rounded" style="border-right: 2px solid white;">
+        <form class="form-inline" method="GET">
+            <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search">
+            &nbsp;&nbsp;
+            <button class="btn" style="background-color:rgb(177, 177, 177);" type="submit">Search</button>
+          </form>
+          <hr>
+          
+            {% if search %}
+            {% for search_user in result %}
+            {% if search_user.user_profile.profile_pic %}
+            <img src="/media/{{search_user.user_profile.profile_pic}}" alt="profile_pic" width=50px; height=50px; class="rounded-circle">
+            {% else %}
+            <img src="/media/profile_pic.png" alt="default_pic" width=50px; height=50px; class="rounded-circle"> 
+            {% endif %}
+            {{search_user.username}}
+            <br>
+            <h5><a href="{% url 'Login_App:user_profile'  username=search_user.username %}">{{search_user.user_profile.full_name}}</a></h5>
+            <hr>
+            {% endfor %}
+            {% endif %}
+
+    </div>
+    <div class="col-sm-8 shadow-none p-3 mb-5 bg-light rounded" style="border-left: 2px solid white;">
+            <h2>Images :</h2>
+            <hr>
+            {% for author_post in posts %}
+            <div class="shadow-sm p-3 mb-5 bg-white">
+                {% if author_post.author.user_profile.profile_pic %}
+                    <img src="/media/{{author_post.author.user_profile.profile_pic}}" alt="profile_pic" width=50px; height=50px; class="rounded-circle">
+                    {% else %}
+                    <img src="/media/profile_pic.png" alt="default_pic" width=50px; height=50px; class="rounded-circle"> 
+                {% endif %}
+                &nbsp;
+
+                <a href="{% url 'Login_App:user_profile'  username=author_post.author %}" style="text-decoration: none; color: rgb(70, 70, 73);">
+                    <b>{{ author_post.author.user_profile.full_name }}</b></a>
+                <hr>
+                <h5># {{author_post.caption}}</h5>
+                <h6><i>upload date:{{author_post.upload_date}}</i></h6>
+                <img src="/media/{{author_post.image}}" alt="Image" width="100%">
+                <br>
+                <div>
+                    <br>
+                    
+                    &nbsp;
+                    {% if author_post.pk in liked_post_list %}
+                    <a href="{% url 'Posts_App:unlike' author_post.pk %}"><i class="fas fa-heart" style="font-size: 36px; color: crimson;"></i></a>
+                    {% else %}
+                    <a href="{% url 'Posts_App:like' author_post.pk %}"><i class="far fa-heart" style="font-size: 36px;"></i></a>
+                    {% endif %}
+                    &nbsp;&nbsp;
+                    <i><b>{{author_post.like_post.count}} Loves</b></i>
+                    
+                </div>
+            </div>
+            {% endfor %}
+
+        
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}

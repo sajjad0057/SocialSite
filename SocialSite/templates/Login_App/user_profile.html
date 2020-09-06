@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title_block %} {{user.username}} | profile {% endblock %}
+{% block css%}
+<style>
+    .post{
+        display: flex;
+        justify-content: space-between;
+    }
+    .crop{
+        display: flex;
+        justify-content: space-around;
+        overflow: hidden;
+        flex-wrap: wrap;
+    }
+    .crop img{
+        width: 180px;
+        height: 180px;
+        padding: 2px;
+
+    }
+</style>
+
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-sm-4 shadow-none p-3 mb-5 bg-light rounded" style="border-right: 2px solid white;">
+        <center>
+            {% if search_user.user_profile.profile_pic %}
+            <img src="/media/{{search_user.user_profile.profile_pic}}" alt="profile_pic" width=150px; height=150px; class="rounded-circle">
+            {% else %}
+            <img src="/media/profile_pic.png" alt="default_pic" width=150px; height=150px; class="rounded-circle"> 
+            {% endif %}
+        
+        </center>
+            <hr>
+            <div class="post">
+                <h4>{{search_user.username}}</h4>
+                {% if already_follow %}
+                <button class="btn btn-info"><a href="{% url 'Login_App:unfollow' search_user.username %}" style="text-decoration:one;color: white;">Unfollow</a></button>
+                {% else %}
+                <button class="btn btn-info"><a href="{% url 'Login_App:follow' search_user.username %}" style="text-decoration:one;color: white;">Follow</a></button>
+                {% endif %}
+            </div>
+
+            <hr>
+            <h6> {{search_user.post.count}} posts | {{search_user.following.count}} Followers | 
+                {{search_user.follower.count}} Following
+            </h6>
+            <hr>
+            <h6>
+                Name : {{search_user.user_profile.full_name}}
+            </h6>
+            <hr>
+            <p>
+                <b>descriptions : </b>
+                {{search_user.user_profile.description}}
+
+            </p>
+
+            <hr>
+            <h6>Birth Date: {{search_user.user_profile.dob}}</h6>
+            <hr>
+            <h6>Facebook : {{search_user.user_profile.facebook}} </h6>
+            <hr>
+            <h6>Website : {{search_user.user_profile.website}} </h6>
+            <hr>
+    
+        
+
+    </div>
+    <div class="col-sm-8 shadow-none p-3 mb-5 bg-light rounded" style="border-left: 2px solid white;">
+        <div class="post">
+        <div>
+            <h3> Posts : </h3>
+
+        </div>
+    </div>
+    <hr>
+    <!--start User post section-->
+
+    <div class="shadow-sm p-3 mb-5 bg-white crop">
+        {% for post in search_user.post.all %}
+        <div>
+            <h5># {{post.caption}} </h5>
+            <hr>
+            <img src="/media/{{post.image}}" alt="Image">
+            <br>
+            <i><b>{{post.like_post.count}} Loves</b></i>
+            <hr>
+        </div>
+
+        {% endfor %}
+    </div>
+
+
+</div>
+</div>
+
+
+{% endblock %}
